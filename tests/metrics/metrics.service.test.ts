@@ -1,19 +1,20 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { metricsService } from "../../src/modules/metrics/metrics.service";
 import { prisma } from "../../src/prisma";
 
-jest.mock("../../src/prisma", () => ({
+vi.mock("../../src/prisma", () => ({
   prisma: {
-    $queryRaw: jest.fn()
+    $queryRaw: vi.fn()
   }
 }));
 
 describe("metricsService", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  test("escolasRuraisComLabInternet", async () => {
-    (prisma.$queryRaw as jest.Mock).mockResolvedValue([
+  it("escolasRuraisComLabInternet", async () => {
+    (prisma.$queryRaw as any).mockResolvedValue([
       { escolas_rurais_com_lab_e_internet: BigInt(10) }
     ]);
 
@@ -23,8 +24,8 @@ describe("metricsService", () => {
     expect(result).toEqual({ escolas_rurais_com_lab_e_internet: 10 });
   });
 
-  test("mediaComputadoresPorAluno", async () => {
-    (prisma.$queryRaw as jest.Mock).mockResolvedValue([
+  it("mediaComputadoresPorAluno", async () => {
+    (prisma.$queryRaw as any).mockResolvedValue([
       { media_computadores_por_aluno: 2.45 }
     ]);
 
@@ -33,8 +34,8 @@ describe("metricsService", () => {
     expect(result).toEqual({ media_computadores_por_aluno: 2.45 });
   });
 
-  test("totalEscolasNordeste", async () => {
-    (prisma.$queryRaw as jest.Mock).mockResolvedValue([
+  it("totalEscolasNordeste", async () => {
+    (prisma.$queryRaw as any).mockResolvedValue([
       { total_escolas_nordeste: BigInt(123) }
     ]);
 
@@ -43,8 +44,8 @@ describe("metricsService", () => {
     expect(result).toEqual({ total_escolas_nordeste: 123 });
   });
 
-  test("totalEscolasNordestRural", async () => {
-    (prisma.$queryRaw as jest.Mock).mockResolvedValue([
+  it("totalEscolasNordestRural", async () => {
+    (prisma.$queryRaw as any).mockResolvedValue([
       { total_escolas_nordeste: BigInt(50) }
     ]);
 
@@ -53,8 +54,8 @@ describe("metricsService", () => {
     expect(result).toEqual({ total_escolas_nordeste: 50 });
   });
 
-  test("detalhesInfraRural", async () => {
-    (prisma.$queryRaw as jest.Mock)
+  it("detalhesInfraRural", async () => {
+    (prisma.$queryRaw as any)
       .mockResolvedValueOnce([{ total_sem_banda_larga: BigInt(5) }])
       .mockResolvedValueOnce([{ total_rede_local: BigInt(12) }])
       .mockResolvedValueOnce([{ total_rede_local_sem_banda_larga: BigInt(3) }]);
@@ -68,11 +69,11 @@ describe("metricsService", () => {
     });
   });
 
-  test("detalhesInternetBandaLarga", async () => {
-    (prisma.$queryRaw as jest.Mock)
-      .mockResolvedValueOnce([{ total: BigInt(4) }]) // rede local sem banda larga
-      .mockResolvedValueOnce([{ total: BigInt(20) }]) // rede local
-      .mockResolvedValueOnce([{ total: BigInt(7) }]); // sem banda larga
+  it("detalhesInternetBandaLarga", async () => {
+    (prisma.$queryRaw as any)
+      .mockResolvedValueOnce([{ total: BigInt(4) }])
+      .mockResolvedValueOnce([{ total: BigInt(20) }])
+      .mockResolvedValueOnce([{ total: BigInt(7) }]);
 
     const result = await metricsService.detalhesInternetBandaLarga();
 
@@ -83,8 +84,8 @@ describe("metricsService", () => {
     });
   });
 
-  test("listaEscolas", async () => {
-    (prisma.$queryRaw as jest.Mock).mockResolvedValue([
+  it("listaEscolas", async () => {
+    (prisma.$queryRaw as any).mockResolvedValue([
       { nome_escola: "Escola X", possui_laboratorio: true, possui_internet: false },
       { nome_escola: "Escola Y", possui_laboratorio: false, possui_internet: true }
     ]);
